@@ -136,7 +136,20 @@ app.post('/delete-order/:id', (req, res) => {
     db.run("DELETE FROM Inventory WHERE id = ?", [id], () => res.redirect('/#inventory'));
   });
   
+  app.post('/update-product/:id', (req, res) => {
+    const { product, price } = req.body;
+    const id = req.params.id;
+    db.run(`UPDATE Products SET product = ?, price = ? WHERE id = ?`, [product, price, id], () => {
+      res.redirect('/#products');
+    });
+  });
   
+  app.post('/delete-product/:id', (req, res) => {
+    const id = req.params.id;
+    db.run("DELETE FROM Products WHERE id = ?", [id], () => {
+      res.redirect('/#products');
+    });
+  });
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

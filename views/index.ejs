@@ -228,11 +228,57 @@
 
       <div id="products" class="tab-pane fade">
         <h3>Products</h3>
-        <form action="/add-product" method="POST" class="mb-4">
-          <input name="product" class="form-control mb-2" placeholder="Product Name" required>
-          <input name="price" type="number" class="form-control mb-2" placeholder="Price" required>
-          <button class="btn btn-success">Add Product</button>
-        </form>
+
+<!-- Add Product Form -->
+<form action="/add-product" method="POST" class="mb-4">
+  <input name="product" class="form-control mb-2" placeholder="Product Name" required>
+  <input name="price" type="number" class="form-control mb-2" placeholder="Price" required>
+  <button class="btn btn-success">Add Product</button>
+</form>
+
+<!-- Products Table -->
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Product</th><th>Price</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% products.forEach(p => { %>
+      <tr>
+        <td><%= p.product %></td>
+        <td>$<%= p.price.toFixed(2) %></td>
+        <td>
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal<%= p.id %>">Edit</button>
+          <form action="/delete-product/<%= p.id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editProductModal<%= p.id %>" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form action="/update-product/<%= p.id %>" method="POST">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <input name="product" class="form-control mb-2" value="<%= p.product %>" required>
+                <input name="price" type="number" class="form-control mb-2" value="<%= p.price %>" required>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary">Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </tbody>
+</table>
       </div>
     </div>
   </div>
