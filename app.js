@@ -76,17 +76,17 @@ app.post('/add-order', upload.single('file'), (req, res) => {
     db.run(`INSERT INTO Orders (customerName, productId, quantity, totalPrice, dateOrdered, dateCommitted, status, file)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [customerName, productId, quantity, totalPrice, dateOrdered, dateCommitted, status, filePath],
-      () => res.redirect('/'));
+      () => res.redirect('/#orders'));
   });
 });
 
 app.post('/add-product', (req, res) => {
   const { product, price } = req.body;
-  db.run(`INSERT INTO Products (product, price) VALUES (?, ?)`, [product, price], () => res.redirect('/'));
+  db.run(`INSERT INTO Products (product, price) VALUES (?, ?)`, [product, price], () => res.redirect('/#products'));
 });
 
 app.post('/delete-order/:id', (req, res) => {
-    db.run("DELETE FROM Orders WHERE id = ?", [req.params.id], () => res.redirect('/'));
+    db.run("DELETE FROM Orders WHERE id = ?", [req.params.id], () => res.redirect('/#orders'));
   });
 
   app.post('/update-order/:id', upload.single('file'), (req, res) => {
@@ -109,7 +109,7 @@ app.post('/delete-order/:id', (req, res) => {
         id
       ];
   
-      db.run(sql, params, () => res.redirect('/'));
+      db.run(sql, params, () => res.redirect('/#orders'));
     });
   });
 
@@ -117,7 +117,7 @@ app.post('/delete-order/:id', (req, res) => {
     const { itemName, category, quantity, price, location } = req.body;
     db.run(`INSERT INTO Inventory (itemName, category, quantity, price, location)
             VALUES (?, ?, ?, ?, ?)`, [itemName, category, quantity, price, location], () => {
-      res.redirect('/');
+      res.redirect('/#inventory');
     });
   });
 
@@ -127,13 +127,13 @@ app.post('/delete-order/:id', (req, res) => {
     db.run(`UPDATE Inventory SET 
             itemName = ?, category = ?, quantity = ?, price = ?, location = ?
             WHERE id = ?`, [itemName, category, quantity, price, location, id], () => {
-      res.redirect('/');
+      res.redirect('/#inventory');
     });
   });
   
   app.post('/delete-inventory/:id', (req, res) => {
     const id = req.params.id;
-    db.run("DELETE FROM Inventory WHERE id = ?", [id], () => res.redirect('/'));
+    db.run("DELETE FROM Inventory WHERE id = ?", [id], () => res.redirect('/#inventory'));
   });
   
   
